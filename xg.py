@@ -68,7 +68,7 @@ if not st.session_state.authenticated:
     user_key = st.text_input("أدخل المفتاح الخاص بك للوصول إلى القوة:", type="password")
     
     if st.button("تفعيل الأداة 🔥"):
-        if user_key == "aligx3gx3":
+        if user_key == "a":
             st.session_state.authenticated = True
             st.rerun()
         else:
