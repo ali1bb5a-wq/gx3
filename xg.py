@@ -11,7 +11,7 @@ import os
 from concurrent.futures import ThreadPoolExecutor
 
 # --- إعدادات الصفحة وإخفاء شعارات GitHub و Streamlit ---
-st.set_page_config(page_title="DOOMSDAY ATTACK - GX3GX3", page_icon="💀", layout="wide")
+st.set_page_config(page_title="DOOMSDAY ATTACK - GX1Ai", page_icon="💀", layout="wide")
 
 st.markdown("""
     <style>
@@ -72,7 +72,7 @@ if not st.session_state.authenticated:
             st.session_state.authenticated = True
             st.rerun()
         else:
-            st.error("❌ المفتاح خطأ! تواصل مع المطور لتفعيل @PDD6P")
+            st.error("❌ المفتاح خطأ! تواصل مع المطور لتفعيل @VVAIY")
     st.stop()
 
 # --- إذا تم التفعيل، تظهر الأداة كاملة ---
@@ -83,7 +83,7 @@ st.image("https://files.catbox.moe/3cq9i1.jpg", use_container_width=True)
 st.markdown('</div>', unsafe_allow_html=True)
 
 st.markdown("<h1 style='text-align: center; color: #ff0000; font-size: 50px;'>هجـوم يوم القيامة</h1>", unsafe_allow_html=True)
-st.markdown("<h3 style='text-align: center; color: white;'>قناتي: gx3gx3 | المطور: @PDD6P</h3>", unsafe_allow_html=True)
+st.markdown("<h3 style='text-align: center; color: white;'>قناتي: GX1Ai | المطور: @VVAIY</h3>", unsafe_allow_html=True)
 
 # --- تثبيت المكتبات تلقائياً (بدون حذف حرف واحد) ---
 def install_libs():
@@ -101,7 +101,7 @@ from termcolor import colored
 import pyfiglet
 
 # رابط القناة الجديد
-CH_LINK = 'https://t.me/gx3gx3'
+CH_LINK = 'https://t.me/gx1ai'
 
 def generate_unique_ids():
     timestamp = int(time.time() * 1000)
